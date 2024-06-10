@@ -1,0 +1,8 @@
+{
+    "workbench.editor.customLabels.patterns": {
+        "**/app/**/page.js": "PAGE ${dirname}",
+        "**/app/**/page.jsx": "PAGE ${dirname}"
+    },
+    "editor.fontSize": 14,
+    "editor.fontWeight": "bold"
+}
