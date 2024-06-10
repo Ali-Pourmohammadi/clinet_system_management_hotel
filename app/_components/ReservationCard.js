@@ -38,24 +38,20 @@ function ReservationCard({ booking }) {
           <h3 className='text-xl font-semibold'>
             {numNights} nights in Cabin {name}
           </h3>
-          {isPast(new Date(startDate)) ? (
-            <span className='bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
-              past
-            </span>
-          ) : (
+       
             <span className='bg-green-800 text-green-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
               upcoming
             </span>
-          )}
+          
         </div>
 
-        <p className='text-lg text-primary-300'>
+        {/* <p className='text-lg text-primary-300'>
           {format(new Date(startDate), 'EEE, MMM dd yyyy')} (
           {isToday(new Date(startDate))
             ? 'Today'
             : formatDistanceFromNow(startDate)}
           ) &mdash; {format(new Date(endDate), 'EEE, MMM dd yyyy')}
-        </p>
+        </p> */}
 
         <div className='flex gap-5 mt-auto items-baseline'>
           <p className='text-xl font-semibold text-accent-400'>${totalPrice}</p>

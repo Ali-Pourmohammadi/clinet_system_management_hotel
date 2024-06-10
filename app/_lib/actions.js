@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabase";
+import { getBookings, getGuest } from "./data-service";
 
 // signIn
 export  async function  signInAction(){
@@ -15,7 +16,6 @@ export async function signOutAction(){
 }
 
 // submit profile form
-
 export async function updateProfile(formData){
     const session  = await auth();
     if(!session) throw new Error("you must be logged in !");
@@ -36,5 +36,21 @@ export async function updateProfile(formData){
         throw new Error('Guest could not be updated');
       }
         // update ui after change 
-        revalidatePath('/account/profile')
+        revalidatePath('/account/profile');
+}
+
+// delete reservation(bookings)
+export default async function deleteReservation(bookingId){
+  const session =  await auth();
+  const guestBookings =  await getBookings(session.user.guestId);
+// details for each users booking witch cabins
+  const guestBookingsIds = guestBookings.map((booking)=> booking.id);
+  if(!guestBookingsIds.includes(bookingId))throw new Error("You can Deleting this Reservation");
+  console.log(guestBookingsIds);
+  const {error} = await supabase.from('bookings').delete().eq('id', bookingId);
+  if (error) {
+    console.error(error);
+    throw new Error('Booking could not be deleted');
+  }
+  revalidatePath('account/reservations');
 }
