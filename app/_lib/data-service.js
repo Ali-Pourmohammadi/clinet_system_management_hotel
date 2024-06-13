@@ -143,12 +143,15 @@ export async function getSettings() {
 
 export async function getCountries() {
   try {
-    const res = await fetch(
-      `https://countryapi.io/api/all?apikey=${API_KEY}`
-    );
+    const res = await fetch('https://restfulcountries.com/api/v1/countries', {
+      headers: {
+        'Authorization': `Bearer 1168|yXYYMUZG8GDxigs9ywvlmLJh6Ju0nOUlCS36Drju`
+      }
+    });
     const countries = await res.json();
     return countries;
-  } catch {
+  } catch (error) {
+    console.error(error);
     throw new Error('Could not fetch countries');
   }
 }

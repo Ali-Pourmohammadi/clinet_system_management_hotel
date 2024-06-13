@@ -1,16 +1,23 @@
 import { getCountries } from '@/app/_lib/data-service';
 
-// Let's imagine your colleague already built this component 😃
-
 // server component
 async function SelectCountry({ defaultCountry, name, id, className }) {
-  const countries = await getCountries();
+  let response;
+  try {
+    response = await getCountries();
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+    return <div>Error loading countries</div>;
+  }
+
+  const countries = response.data; // Access the array of countries
 
   // Ensure the countries data is in the correct format [{name, flag}]
-  const countryArray = Object.values(countries).map(country => ({
+  const countryArray = countries.map(country => ({
     name: country.name,
-    flag: country.flag.small // or any other size you prefer
+    flag: country.href.picture
   }));
+
 
   const flag =
     countryArray.find((country) => country.name === defaultCountry)?.flag ?? '';

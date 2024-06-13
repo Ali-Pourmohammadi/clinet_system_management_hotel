@@ -3,7 +3,6 @@ import { getCabins } from "../_lib/data-service";
 
 export  async function CabinsList({filter}){
     const cabins = await getCabins(); 
-    console.log(cabins)
     if(!cabins.length)return null;
     let displayCabins;
 

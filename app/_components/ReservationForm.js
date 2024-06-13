@@ -1,16 +1,25 @@
-import { auth } from "../_lib/auth";
+"use client";
+import { differenceInDays, formatDate } from "date-fns";
+import { useReservation } from "./ReservationContext";
+import { createReservation } from "../_lib/actions";
 
- async function ReservationForm({cabin}) {
+  function ReservationForm({cabin , user}) {
   // CHANGE
-  const {maxCapacity} = cabin;
-  const session = await auth();
-  const {user} = session;
-
+  const { range , resetRange } = useReservation();
+  const startDate = range.to;
+  const endDate = range.from;
+  const numNights = differenceInDays(startDate , endDate);
+    const {maxCapacity , discount , regularPrice , id} = cabin;
+    const cabinPrice = numNights *  (regularPrice - discount);
+    const bookingData={
+      startDate , endDate , numNights , cabinPrice , cabinId: id
+    }
+    console.log(bookingData);
+    const createReservationWidthData = createReservation.bind(null , bookingData);
   return (
     <div className='scale-[1.01]'>
       <div className='bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center'>
         <p>Logged in as</p>
-
         <div className='flex gap-4 items-center'>
           <img
             // Important to display google profile images
@@ -23,7 +32,9 @@ import { auth } from "../_lib/auth";
         </div>
       </div>
 
-      <form className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col'>
+      <form action={(FormData)=>{createReservationWidthData(FormData)
+        resetRange();
+      }} className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col'>
         <div className='space-y-2'>
           <label htmlFor='numGuests'>How many guests?</label>
           <select
